@@ -1,52 +1,85 @@
-#include<stdio.h>
-#include<string.h>
+#include <stdio.h>
+#include <string.h>
 
-struct nametype{
-       char firstname[40];
-       char midname[40];
-       char lastname[40];
-};
+typedef struct {
+    char firstname[40];
+    char midname[40];
+    char lastname[40];
+} nametype;
 
-struct studenttype{
-       int id;
-       struct nametype name;
-};
+typedef struct {
+    int id;
+    nametype name;
+    char grade[3];
+} studenttype;
 
-int main(){
+void calculate_grade(studenttype *s, int mark);
 
-       int numOfStudent, i, mid;
-       printf("Enter number of student\n~ ");
-       scanf("%d", &numOfStudent);
+int main() {
+    int numberOfStudent, mid, i;
+    printf("Enter number of students\n~ ");
+    scanf("%d", &numberOfStudent);
 
-       struct studenttype student[numOfStudent];
+    studenttype student[numberOfStudent];
+    int marks[numberOfStudent]; // Ensure this matches the number of students or adjust dynamically
 
-       for(i=0; i<numOfStudent; i++){
-              printf("Enter the Id for student %d\n~ ", i+1);
-              scanf("%d", &student[i].id);
-              printf("Enter the First name for student %d\n~ ", i+1);
-              scanf("%s", student[i].name.firstname);
+    for(i = 0; i < numberOfStudent; i++) {
+        printf("Enter student Id\n~ ");
+        scanf("%d", &student[i].id);
 
-              student[i].name.midname[0] = '\0';
-              printf("Any mid name?\n1.Yes\n2.No\n~ ");
-              scanf("%d", &mid);
-              if(mid == 1){
-                     printf("Enter the Mid name for student %d\n~ ", i+1);
-                     scanf("%s", student[i].name.midname);
-              }
+        printf("Enter student First name\n~ ");
+        scanf("%s", student[i].name.firstname);
 
-              printf("Enter the Last name for student %d\n~ ", i+1);
-              scanf("%s", student[i].name.lastname);
+        student[i].name.midname[0] = '\0'; // Corrected to use student[i]
+        printf("Any mid name?\n1.Yes\n2.No\n~ ");
+        scanf("%d", &mid);
 
-              printf("--------------------\n");
+        if(mid == 1) {
+            printf("Enter student Mid name\n~ ");
+            scanf("%s", student[i].name.midname);
+        }
 
-       }
+        printf("Enter student Last name\n~ ");
+        scanf("%s", student[i].name.lastname);
 
-       printf("Output : \n\n");
+        printf("Enter Number of student\n~ "); // Initialize the grade to an empty string
+        scanf("%d", marks);
 
-       for(i=0; i<numOfStudent; i++){
-              printf("Id: %d\t", student[i].id);
-              printf("Name: %s %s %s.\n", student[i].name.firstname, student[i].name.midname, student[i].name.lastname);
-       }
 
-       return 0;
+        printf("\n-----------------------------------------------------------\n");
+    }
+
+    for(i = 0; i < numberOfStudent; i++) {
+        calculate_grade(&student[i], marks[i]);
+    }
+
+    printf("Output: \n\n");
+
+    for(i = 0; i < numberOfStudent; i++) {
+        printf("Id: %d\t", student[i].id);
+        printf("Name: %s %s %s\t", student[i].name.firstname, 
+               student[i].name.midname, 
+               student[i].name.lastname);
+        printf("Grade: %s\n", student[i].grade);
+    }
+
+    return 0;
+}
+
+void calculate_grade(studenttype *s, int mark) {
+    if (mark >= 90) {
+        strcpy(s->grade, "Golden-A");
+    } else if (mark >= 80) {
+        strcpy(s->grade, "A+");
+    } else if (mark >= 70) {
+        strcpy(s->grade, "B");
+    } else if (mark >= 60) {
+        strcpy(s->grade, "C");
+    } else if (mark >= 50) {
+        strcpy(s->grade, "D");
+    } else if (mark >= 40) {
+        strcpy(s->grade, "E");
+    } else {
+        strcpy(s->grade, "F");
+    }
 }
